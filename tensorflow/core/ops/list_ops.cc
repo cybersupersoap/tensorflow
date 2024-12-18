@@ -327,7 +327,7 @@ REGISTER_OP("TensorListConcatV2")
           1, &element_shape));
       int leading_dims_shape = c->input_tensor(2)->dims();
 	  for (int i = 0; i < leading_dims_shape; ++i) {
-        if (leading_dims_shape.dim_size(i) < 1) {
+        if (c->input_tensor(2).dim_size(i) < 1) {
        	  return errors::InvalidArgument(
             "The leading dimension must be at least 1, but got ",
             std::to_string(leading_dims_shape.dim_size(i))
