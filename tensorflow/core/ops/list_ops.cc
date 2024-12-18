@@ -325,6 +325,15 @@ REGISTER_OP("TensorListConcatV2")
       shape_inference::ShapeHandle element_shape;
       TF_RETURN_IF_ERROR(c->MakeShapeFromShapeTensorTreatScalarAsUnknownShape(
           1, &element_shape));
+      int leading_dims_shape = c->input(2).shape();
+	  for (int i = 0; i < leading_dims_shape.dims(); ++i) {
+        if (leading_dims_shape.dim_size(i) < 1) {
+       	  return errors::InvalidArgument(
+            "The leading dimension must be at least 1, but got ",
+            std::to_string(leading_dims_shape.dim_size(i))
+       	  )
+        }
+	  }
       return TensorListConcatShapeInference(c, element_shape);
     });
 
