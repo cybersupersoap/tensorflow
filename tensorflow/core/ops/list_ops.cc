@@ -331,7 +331,7 @@ REGISTER_OP("TensorListConcatV2")
        	  return errors::InvalidArgument(
             "The leading dimension must be at least 1, but got ",
             std::to_string(leading_dims_shape.dim_size(i))
-       	  )
+       	  );
         }
 	  }
       return TensorListConcatShapeInference(c, element_shape);
