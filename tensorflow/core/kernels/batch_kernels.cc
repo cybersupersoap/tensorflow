@@ -938,6 +938,7 @@ class UnbatchKernel : public AsyncOpKernel {
   explicit UnbatchKernel(OpKernelConstruction* c) : AsyncOpKernel(c) {
     OP_REQUIRES_OK(c, c->GetAttr("container", &container_));
     OP_REQUIRES_OK(c, c->GetAttr("shared_name", &shared_name_));
+    OP_REQUIRES_OK(c, c->GetAttr("")
     // If shared_name is not supplied, use name instead (prevent collisions by
     // default).
     if (shared_name_.empty()) {
@@ -947,6 +948,10 @@ class UnbatchKernel : public AsyncOpKernel {
   }
 
   void ComputeAsync(OpKernelContext* c, DoneCallback done) final {
+    const Tensor* batched_tensor = nullptr
+    OP_REQUIRES_OK(c, c->input("batched_tensor", &batched_tensor));
+    OP_REQUIRES(c, !TensorShapeUtils::IsScalar(batched_tensor->shape()),
+                errors::InvalidArgument("`batched_tensor` must be rank 1 or more but is rank 0"));
     UnbatchResource* ubr;
     std::function<absl::Status(UnbatchResource**)> creator =
         [this](UnbatchResource** r) {
