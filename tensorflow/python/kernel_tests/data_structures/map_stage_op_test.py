@@ -644,7 +644,7 @@ class MapStageTest(test.TestCase):
             errors.InvalidArgumentError, 'key must be an int64 scalar'
     ):
       v = data_flow_ops.gen_data_flow_ops.map_unstage(
-        key=constant_op.constant(value=[1], shape=(1, 3), dtype=dtypes.int64),
+        key=[],
         indices=np.array([[6]]),
         dtypes=[dtypes.int64],
         capacity=0,
