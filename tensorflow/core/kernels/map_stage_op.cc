@@ -588,8 +588,6 @@ class MapUnstageOp : public OpKernel {
 
     OP_REQUIRES_OK(ctx, ctx->input("key", &key_tensor));
     OP_REQUIRES_OK(ctx, ctx->input("indices", &indices_tensor));
-    OP_REQUIRES_OK(ctx, map->pop(key_tensor, indices_tensor, &tuple));
-
     OP_REQUIRES(ctx, key_tensor->NumElements() > 0,
             errors::InvalidArgument("key must not be empty"));
 
@@ -597,6 +595,10 @@ class MapUnstageOp : public OpKernel {
                 errors::InvalidArgument(
                     "key must be an int64 scalar, got tensor with shape: ",
                     key_tensor->shape()));
+
+    OP_REQUIRES_OK(ctx, map->pop(key_tensor, indices_tensor, &tuple));
+
+
 
     OP_REQUIRES(
         ctx, tuple.size() == indices_tensor->NumElements(),
