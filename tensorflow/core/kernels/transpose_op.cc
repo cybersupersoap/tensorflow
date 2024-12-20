@@ -101,6 +101,13 @@ absl::Status PermutationHelper(const Tensor& perm, const int dims,
                                    ". But input(1) is a vector of size ",
                                    Vperm.size());
   }
+  for (int i = 0; i < dims; ++i) {
+    if (Vperm(i) < 0 )
+      return errors::InvalidArgumentError(absl::StrCat(
+                        "The perm values should be non-negative "
+                        "but found ",
+                        perm_vector(i), " at index ", i)));
+  }
   // using volatile instead of SubtleMustCopy here so that the
   // asynchrony boundary is permutation.
   const volatile Tperm* perm_begin =
@@ -150,10 +157,7 @@ void TransposeOp::Compute(OpKernelContext* ctx) {
   bool is_identity = true;
   for (int i = 0; i < dims; ++i) {
     int32_t d = permutation[i];
-    if (d < 0) {
-      d += dims;
-      permutation[i] = d;
-    }
+    if (d < 0)   d += dims;
     OP_REQUIRES(
         ctx, 0 <= d && d < dims,
         errors::InvalidArgument(d, " is out of range [0 .. ", dims, ")"));
