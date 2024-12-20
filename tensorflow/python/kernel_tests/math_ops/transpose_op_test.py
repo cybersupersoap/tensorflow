@@ -553,6 +553,5 @@ class TransposeTest(test.TestCase):
       self.evaluate(v)
 
 
-
 if __name__ == "__main__":
   test.main()
