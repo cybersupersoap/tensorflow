@@ -103,10 +103,10 @@ absl::Status PermutationHelper(const Tensor& perm, const int dims,
   }
   for (int i = 0; i < dims; ++i) {
     if (Vperm(i) < 0 )
-      return errors::InvalidArgumentError(absl::StrCat(
+      return errors::InvalidArgument(absl::StrCat(
                         "The perm values should be non-negative "
                         "but found ",
-                        perm_vector(i), " at index ", i)));
+                        Vperm(i), " at index ", i));
   }
   // using volatile instead of SubtleMustCopy here so that the
   // asynchrony boundary is permutation.
