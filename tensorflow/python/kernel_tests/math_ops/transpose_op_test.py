@@ -542,11 +542,15 @@ class TransposeTest(test.TestCase):
         np.arange(0., 30).reshape([2, 3, 5]), [0, 1, 1], "2 is missing")
 
   def testNegativePerm(self):
-      self.assertEqual([15, 100, 37],
-                       array_ops.transpose(
-                           constant_op.constant(
-                               1, dtype=dtypes.int32, shape=[100, 37, 15]),
-                           [-1, 0, -2]).get_shape().dims)
+      with self.assertRaisesRegex(
+              errors.InvalidArgumentError, 'The perm values should be non-negative'
+      ):
+        v = array_ops.transpose(
+          constant_op.constant(
+              1, dtype=dtypes.int32, shape=[100, 37, 15]),
+          [-1, 0, -2])
+        self.evaluate(v)
+
 
 
 if __name__ == "__main__":
