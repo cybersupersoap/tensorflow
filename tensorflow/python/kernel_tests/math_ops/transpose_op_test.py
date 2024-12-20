@@ -548,7 +548,7 @@ class TransposeTest(test.TestCase):
     ):
       v = array_ops.transpose(
         constant_op.constant(
-              1, dtype=dtypes.int32, shape=[100, 37, 15]),
+            1, dtype=dtypes.int32, shape=[100, 37, 15]),
           [-1, 0, -2])
       self.evaluate(v)
 
